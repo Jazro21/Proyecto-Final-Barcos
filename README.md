@@ -50,7 +50,8 @@ interactuar con el sistema:
 5. Registrar un pasajero en un viaje.
 6. Listar todos los pasajeros de un viaje.
 7. Salir.
-   
+
+
 6. Balanceo y Mantenimiento:
 • Asegurarse de que el árbol AVL de viajes se mantenga balanceado después de 
 cada inserción y eliminación
