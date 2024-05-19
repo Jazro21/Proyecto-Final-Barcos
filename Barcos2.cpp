@@ -9,6 +9,10 @@
 // este es le codigo base (no funciona). Solo tiene la opcion de registar embarcacion
 // todos los metodos implementados los hice guiandome del codigo AVL del profesor
 
+// notas de actualizacion
+// se implemento el metodo InOrden
+// Se arreglo el problema en el registro. al parecer, funciona correctamente
+
 #include <iostream>
 #include <string.h>
 #include <malloc.h>
