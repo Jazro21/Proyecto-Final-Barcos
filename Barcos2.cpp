@@ -16,16 +16,16 @@ using namespace std;
 
 struct Barcos
 {
-    char NomEmbarcacion[20];
+    char NomEmbarcacion[50];
     int Precio = 0;
-    char Destino[20];
+    char Destino[30];
     int Capacidad = 0;
 
-    char Identificador[10];
-    char Matricula[2];
-    char Dia[2];
-    char Mes[2];
-    char Año[4];
+    char Identificador[20];
+    char Matricula[10];
+    char Dia[10];
+    char Mes[10];
+    char Año[10];
 
     Barcos *izq;
     Barcos *der;
@@ -181,7 +181,7 @@ int InOrden(struct Barcos *sub)
     {
         InOrden(sub->izq);
     }
-
+    cout<<""<<endl;
     cout << "Nombre de la embarcacion: " << sub->NomEmbarcacion << endl;
     cout << "Destino del viaje: " << sub->Destino << endl;
     cout << "Precio del viaje: $" << sub->Precio << endl;
@@ -216,7 +216,7 @@ int main()
             raiz = insertar(raiz);
             break;
         case 2:
-            cout << "Recorrido de las embarcaciones (InOrden): ";
+            cout << "Recorrido de las embarcaciones (InOrden): " << endl;
             InOrden(raiz);
             cout << endl;
             break;
