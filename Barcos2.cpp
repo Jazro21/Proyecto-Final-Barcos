@@ -180,7 +180,6 @@ struct Barcos *insertar(struct Barcos *posicion)
 
 int InOrden(struct Barcos *sub)
 {
-    cout << "------------listado de embarcaciones------------" << endl;
     if (sub->izq != NULL)
     {
         InOrden(sub->izq);
