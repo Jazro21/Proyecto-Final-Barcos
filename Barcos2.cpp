@@ -180,12 +180,11 @@ struct Barcos *insertar(struct Barcos *posicion)
 
 int InOrden(struct Barcos *sub)
 {
-
+    cout << "------------listado de embarcaciones------------" << endl;
     if (sub->izq != NULL)
     {
         InOrden(sub->izq);
     }
-    cout<<""<<endl;
     cout << "Nombre de la embarcacion: " << sub->NomEmbarcacion << endl;
     cout << "Destino del viaje: " << sub->Destino << endl;
     cout << "Precio del viaje: $" << sub->Precio << endl;
@@ -193,10 +192,61 @@ int InOrden(struct Barcos *sub)
     cout << "Fecha de salida: " << sub->Dia << "/" << sub->Mes << "/" << sub->Año << endl;
     cout << "Numero de pasajeros: " << sub->Capacidad << endl;
     cout << "Identificador: " << sub->Identificador << endl;
+    cout << "------------------------------------------------" << endl;
 
     if (sub->der != NULL)
     {
         InOrden(sub->der);
+    }
+    return 0;
+}
+
+char bucadorBarco[20];
+
+int buscarEmbarcacion()
+{
+    aux = raiz;
+
+    if (aux == NULL)
+    {
+        cout << "No hay embarcaciones registradas" << endl;
+        return 0;
+    }
+    if (aux != NULL)
+    {
+        cout << "Ingrese el identificador de la embarcacion: ";
+        cin >> bucadorBarco;
+
+        if (aux->Identificador == bucadorBarco)
+        {
+            cout << "Nombre de la embarcacion: " << aux->NomEmbarcacion << endl;
+            cout << "Destino del viaje: " << aux->Destino << endl;
+            cout << "Precio del viaje: $" << aux->Precio << endl;
+            cout << "Matricula: " << aux->Matricula << endl;
+            cout << "Fecha de salida: " << aux->Dia << "/" << aux->Mes << "/" << aux->Año << endl;
+            cout << "Numero de pasajeros: " << aux->Capacidad << endl;
+            cout << "Identificador: " << aux->Identificador << endl;
+            cout << "------------------------------------------------" << endl;
+        }
+        if (aux->Identificador != bucadorBarco)
+        {
+            if (bucadorBarco > aux->Identificador)
+            {
+                if (aux->der != NULL)
+                {
+                    aux = aux->der;
+                    buscarEmbarcacion();
+                }
+            }
+            if (bucadorBarco < aux->Identificador)
+            {
+                if (aux->izq != NULL)
+                {
+                    aux = aux->izq;
+                    buscarEmbarcacion();
+                }
+            }
+        }
     }
     return 0;
 }
@@ -211,6 +261,7 @@ int main()
         cout << "Menu de opciones" << endl;
         cout << "1. Registrar embarcacion" << endl;
         cout << "2. Mostrar embarcaciones" << endl;
+        cout << "3. Buscar embarcacion" << endl;
         cout << "7. Salir" << endl;
         cin >> opcion;
         switch (opcion)
@@ -220,10 +271,13 @@ int main()
             raiz = insertar(raiz);
             break;
         case 2:
-            cout << "Recorrido de las embarcaciones (InOrden): " << endl;
+            cout << "------------embarcacion registrada------------" << endl;
             InOrden(raiz);
             cout << endl;
             break;
+        case 3:
+        buscarEmbarcacion();
+        break;
         }
     } while (opcion != 7);
     return 0;
