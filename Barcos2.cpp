@@ -12,11 +12,20 @@
 // notas de actualizacion
 // se implemento el metodo InOrden
 // Se arreglo el problema en el registro. al parecer, funciona correctamente
+// implementé el comando "strncpy", para que solo guarde los dos primeros digitos (exepto en año que es de 4), mientras que ignora los demas
+// tambien implemente el comando "strcat", para concatenar una cadena de catarteres a otra. esto lo utilice exclusivamente para el identificador
+// el metodo buscar sigue sin funcionar
+// el metodo registrar pasajero siguen sin funcionar
+
 
 #include <iostream>
 #include <string.h>
 #include <malloc.h>
+#include <string>
+
 using namespace std;
+
+//--------------------estructura de las embarcaciones--------------------
 
 struct Barcos
 {
@@ -25,14 +34,14 @@ struct Barcos
     char Destino[30];
     int Capacidad = 0;
 
-    char Identificador[20];
+    char Identificador[20]; // el minimo son 10
     char Matricula[10];
-    char Dia[10];
-    char Mes[10];
+    char Dia[5];
+    char Mes[5];
     char Año[10];
 
-    Barcos *izq;
-    Barcos *der;
+    Barcos *izq = NULL;
+    Barcos *der = NULL;
 
     int altura = 0;
 };
@@ -40,9 +49,36 @@ struct Barcos
 Barcos *raiz = NULL;
 Barcos *aux = NULL;
 
+//-------------------------------------------------------------------
+
+//--------------------estructura de los pasajeros--------------------
+struct pasajeros
+{
+    char Nombre[20];
+    char Apellido[20];
+    int Cedula = 0;
+    char EmbarcacionElegida[20];
+
+    pasajeros *sig;
+};
+pasajeros *cab = NULL;
+pasajeros *auxP1 = NULL;
+pasajeros *auxP2 = NULL;
+
+//-------------------------------------------------------------------
+
+char temporalMatricula[3];
+char temporalDia[3];
+char temporalMes[3];
+char temporalAño[3];
+
 int RegistrarEmbarcacion()
 {
     aux = (struct Barcos *)malloc(sizeof(struct Barcos));
+
+    cout << "Ingrese la matricula de la embarcacion: ";
+    cin >> temporalMatricula;
+    strncpy(aux->Matricula, temporalMatricula, 2); // "strncpy" hace que solo reciba los dos primeros digitos. los demas lo ignora
 
     cout << "ingrese el nombre de la embarcacion: ";
     cin >> aux->NomEmbarcacion;
@@ -53,17 +89,17 @@ int RegistrarEmbarcacion()
     cout << "Ingrese el precio del viaje: $";
     cin >> aux->Precio;
 
-    cout << "Ingrese la matricula de la embarcacion (solo dos caracteres): ";
-    cin >> aux->Matricula;
-
     cout << "Ingrese el dia del viaje: ";
-    cin >> aux->Dia;
+    cin >> temporalDia;
+    strncpy(aux->Dia, temporalDia, 2);
 
     cout << "Ingrese el mes del viaje: ";
-    cin >> aux->Mes;
+    cin >> temporalMes;
+    strncpy(aux->Mes, temporalMes, 2);
 
     cout << "Ingrese el año del viaje: ";
-    cin >> aux->Año;
+    cin >> temporalAño;
+    strncpy(aux->Año, temporalAño, 4);
 
     cout << "Ingrese la capacidad de la embarcacion (numero de personas): ";
     cin >> aux->Capacidad;
@@ -200,12 +236,10 @@ int InOrden(struct Barcos *sub)
     return 0;
 }
 
-char bucadorBarco[20];
-
 int buscarEmbarcacion()
 {
     aux = raiz;
-
+    char buscadorBarco[20];
     if (aux == NULL)
     {
         cout << "No hay embarcaciones registradas" << endl;
@@ -214,10 +248,10 @@ int buscarEmbarcacion()
     if (aux != NULL)
     {
         cout << "Ingrese el identificador de la embarcacion: ";
-        cin >> bucadorBarco;
-
-        if (aux->Identificador == bucadorBarco)
+        cin >> buscadorBarco;
+        if (aux->Identificador == buscadorBarco)
         {
+            cout << "--------------embarcacion registrada--------------" << endl;
             cout << "Nombre de la embarcacion: " << aux->NomEmbarcacion << endl;
             cout << "Destino del viaje: " << aux->Destino << endl;
             cout << "Precio del viaje: $" << aux->Precio << endl;
@@ -227,9 +261,9 @@ int buscarEmbarcacion()
             cout << "Identificador: " << aux->Identificador << endl;
             cout << "------------------------------------------------" << endl;
         }
-        if (aux->Identificador != bucadorBarco)
+        if (aux->Identificador != buscadorBarco)
         {
-            if (bucadorBarco > aux->Identificador)
+            if (buscadorBarco > aux->Identificador)
             {
                 if (aux->der != NULL)
                 {
@@ -237,7 +271,7 @@ int buscarEmbarcacion()
                     buscarEmbarcacion();
                 }
             }
-            if (bucadorBarco < aux->Identificador)
+            if (buscadorBarco < aux->Identificador)
             {
                 if (aux->izq != NULL)
                 {
@@ -250,6 +284,65 @@ int buscarEmbarcacion()
     return 0;
 }
 
+int registrarPasajero()
+{
+    if (cab == NULL)
+    {
+        cab = (struct pasajeros *)malloc(sizeof(struct pasajeros));
+
+        cout << "ingrese su nombre: ";
+        cin >> cab->Nombre;
+
+        cout << "ingrese su apellido: ";
+        cin >> cab->Apellido;
+
+        cout << "Ingrese su cedula: ";
+        cin >> cab->Cedula;
+
+        cab->sig = NULL;
+        return 0;
+    }
+    if (cab != NULL)
+    {
+        auxP1 = (struct pasajeros *)malloc(sizeof(struct pasajeros));
+        cout << "ingrese su nombre: ";
+        cin >> auxP1->Nombre;
+
+        cout << "ingrese su apellido: ";
+        cin >> auxP1->Apellido;
+
+        cout << "Ingrese su cedula: ";
+        cin >> auxP1->Cedula;
+
+        auxP1->sig = NULL;
+        auxP2 = cab;
+
+        while (auxP2->sig != NULL)
+        {
+            auxP2 = auxP2->sig;
+        }
+
+        auxP2->sig = auxP1;
+        auxP1 = NULL;
+        auxP2 = auxP1;
+
+        free(auxP1);
+        free(auxP2);
+    }
+    return 0;
+}
+
+int MostrarPasajeros()
+{
+    for (auxP1 = cab; auxP1 != NULL; auxP1 = auxP1->sig)
+    {
+        cout << "Nombre: " << auxP1->Nombre << " " << auxP1->Apellido << endl;
+        cout << "Numero de Cedula: " << auxP1->Cedula << endl;
+        cout << "---------------------------------------------" << endl;
+    }
+    return 0;
+}
+
 int main()
 {
     raiz = NULL;
@@ -257,11 +350,16 @@ int main()
 
     do
     {
-        cout << "Menu de opciones" << endl;
-        cout << "1. Registrar embarcacion" << endl;
-        cout << "2. Mostrar embarcaciones" << endl;
-        cout << "3. Buscar embarcacion" << endl;
+        cout << "---------------Menu de opciones---------------" << endl;
+        cout << "1. Registrar embarcacion (no se ha corregido)" << endl;
+        cout << "2. buscar embarcacion (no funcional)" << endl;
+        cout << "3. mostrar embarcaciones" << endl;
+        cout << "4. eliminar embarcacion (no se ha hecho)" << endl;
+        cout << "5. registrar pasajero (no se ha terminado)" << endl;
+        cout << "6. mostrar pasajeros" << endl;
         cout << "7. Salir" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "eliga una opcion: ";
         cin >> opcion;
         switch (opcion)
         {
@@ -270,13 +368,20 @@ int main()
             raiz = insertar(raiz);
             break;
         case 2:
-            cout << "------------embarcacion registrada------------" << endl;
+            buscarEmbarcacion();
+            break;
+        case 3:
+            cout << "------------embarcaciones registradas------------" << endl;
             InOrden(raiz);
             cout << endl;
             break;
-        case 3:
-        buscarEmbarcacion();
-        break;
+        case 5:
+            registrarPasajero();
+            break;
+        case 6:
+            cout << "------------pasajeros registrados------------" << endl;
+            MostrarPasajeros();
+            break;
         }
     } while (opcion != 7);
     return 0;
