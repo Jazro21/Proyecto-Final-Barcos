@@ -78,7 +78,7 @@ long long buscadorBarco = 0;
 
 int RegistrarEmbarcacion()
 {
-    aux = (struct Barcos *)malloc(sizeof(struct Barcos));
+    aux = ((struct Barcos *)malloc(sizeof(struct Barcos)));
 
     cout << "Ingrese la matricula de la embarcacion: ";
     cin >> temporalMatricula;
@@ -133,6 +133,7 @@ int RegistrarEmbarcacion()
     TemporalIdentificador = a + b + c + d;
 
     aux->Identificador = TemporalIdentificador;
+    // ------------------------------------------------------------
 
     aux->izq = NULL;
     aux->der = NULL;
@@ -173,8 +174,8 @@ struct Barcos *RotarIzquierda(struct Barcos *subx)
     struct Barcos *suby = subx->der;
     struct Barcos *sub4 = suby->izq;
 
-    suby->der = subx;
-    subx->izq = sub4;
+    suby->izq = subx;
+    subx->der = sub4;
 
     subx->altura = mayor(ObtenerAltura(subx->izq), ObtenerAltura(subx->der)) + 1;
     suby->altura = mayor(ObtenerAltura(suby->izq), ObtenerAltura(suby->der)) + 1;
@@ -515,6 +516,7 @@ int EliminarCaso2() // el nodo tiene un hijo
 
 int EliminarCaso3() // el nodo tiene dos hijos
 {
+    return 0;
 }
 
 int EliminarEmbarcacion()
