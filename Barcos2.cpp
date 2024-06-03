@@ -574,12 +574,12 @@ int main()
     do
     {
         cout << "---------------Menu de opciones---------------" << endl;
-        cout << "1. Registrar embarcacion" << endl;
-        cout << "2. buscar embarcacion" << endl;
-        cout << "3. mostrar embarcaciones" << endl;
-        cout << "4. eliminar embarcacion (no terminado)" << endl;
-        cout << "5. registrar pasajero" << endl;
-        cout << "6. mostrar pasajeros" << endl;
+        cout << "1. Registrar un nuevo viaje" << endl;
+        cout << "2. Buscar un viaje por identificador" << endl;
+        cout << "3. Listar todos los viajes" << endl;
+        cout << "4. Eliminar un viaje por identificador (no terminado)" << endl;
+        cout << "5. Registrar un pasajero en un viaje" << endl;
+        cout << "6. Listar los pasajeros de un viaje" << endl;
         cout << "7. Salir" << endl;
         cout << "---------------------------------------------" << endl;
         cout << "eliga una opcion: ";
