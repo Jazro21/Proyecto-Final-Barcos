@@ -2,15 +2,6 @@
 // Deymar Andrés Ampudia Rivas
 // Rodrigo Arturo Pérez Angulo
 
-// Notas adicionales del Ing. Ampudia para el Lic. Perez
-
-// Puntos a terminar en el codigo (en orden de prioridad):
-// Crear el metodo ELIMINAR EMBARCACION
-// Evitar que se repita el identificador
-// Verificar que no se exceda le limite de las embarcaciones
-// Mostrar el nombre de la embarcacion cuando se listan los pasajeros de dicha embarcación
-// si ves que me faltó nombrar algún otro punto, hazmelo saber
-
 #include <iostream>
 #include <malloc.h>
 
@@ -53,7 +44,7 @@ struct pasajeros
     char Nombre[20];
     char Apellido[20];
 
-    int MatriculaElegida = 0;
+    int IdentificadorElegido = 0;
     // char EmbarcaionEligida[20]; // no se está implementando
 
     int Cedula = 0;
@@ -80,7 +71,7 @@ int RegistrarEmbarcacion()
 {
     aux = ((struct Barcos *)malloc(sizeof(struct Barcos)));
 
-    cout << "Ingrese la matricula de la embarcacion: ";
+    cout << "Ingrese la matricula del viaje: ";
     cin >> aux->MatriculaOriginal;
     temporalMatricula = aux->MatriculaOriginal;
 
@@ -101,16 +92,16 @@ int RegistrarEmbarcacion()
         }
     }
 
-    cout << "ingrese el nombre de la embarcacion: ";
+    cout << "Ingrese el nombre del viaje: ";
     cin >> aux->NomEmbarcacion;
 
-    cout << "ingrese el destino del viaje: ";
+    cout << "Ingrese el destino del viaje: ";
     cin >> aux->Destino;
 
     cout << "Ingrese el precio del viaje: $";
     cin >> aux->Precio;
 
-    cout << "Ingrese la capacidad de la embarcacion (numero de personas): ";
+    cout << "Ingrese la capacidad del viaje (numero de personas abordo): ";
     cin >> aux->Capacidad;
     aux->PasajerosAbordo = 0;
     // ------------------------------------------------------------
@@ -247,7 +238,7 @@ int InOrden(struct Barcos *sub)
     {
         InOrden(sub->izq);
     }
-    cout << "Nombre de la embarcacion: " << sub->NomEmbarcacion << endl;
+    cout << "Nombre del viaje: " << sub->NomEmbarcacion << endl;
     cout << "Destino del viaje: " << sub->Destino << endl;
     cout << "Precio del viaje: $" << sub->Precio << endl;
     cout << "Matricula: " << sub->MatriculaOriginal << endl;
@@ -267,15 +258,15 @@ int buscarEmbarcacion()
 {
     if (aux == NULL)
     {
-        cout << "No hay embarcaciones registradas" << endl;
+        cout << "No hay viajes registrados" << endl;
         return 0;
     }
     if (aux != NULL)
     {
-        if (aux->MatriculaOriginal == buscadorBarco)
+        if (aux->Identificador == buscadorBarco)
         {
-            cout << "--------------embarcacion registrada--------------" << endl;
-            cout << "Nombre de la embarcacion: " << aux->NomEmbarcacion << endl;
+            cout << "--------------viaje registrado--------------" << endl;
+            cout << "Nombre del viaje: " << aux->NomEmbarcacion << endl;
             cout << "Destino del viaje: " << aux->Destino << endl;
             cout << "Precio del viaje: $" << aux->Precio << endl;
             cout << "Matricula: " << aux->MatriculaOriginal << endl;
@@ -285,7 +276,7 @@ int buscarEmbarcacion()
             cout << "------------------------------------------------" << endl;
             return 0;
         }
-        if (aux->MatriculaOriginal != buscadorBarco)
+        if (aux->Identificador != buscadorBarco)
         {
             if (aux->der != NULL)
             {
@@ -299,7 +290,7 @@ int buscarEmbarcacion()
             }
             if (aux->izq == NULL && aux->der == NULL)
             {
-                cout << "No hay embarcaciones registradas con esa matricula" << endl;
+                cout << "No hay existe un viaje con ese identificador" << endl;
                 return 0;
             }
         }
@@ -311,12 +302,12 @@ int registrarPasajero()
 {
     if (aux == NULL) // no hay embarcaciones registradas
     {
-        cout << "No hay embarcaciones registradas" << endl;
+        cout << "No hay viajes registrados" << endl;
         return 0;
     }
     if (aux != NULL) // hay embarcaciones registradas
     {
-        if (aux->MatriculaOriginal == buscadorBarco) // el buscador coincide con la matricula
+        if (aux->Identificador == buscadorBarco) // el buscador coincide con el identificador
         {
             if (cab == NULL)
             {
@@ -328,7 +319,7 @@ int registrarPasajero()
                 }
                 else if (aux->PasajerosAbordo == aux->Capacidad)
                 {
-                    cout << "Ya no hay cupos disponibles es la embarcacion"<<aux->NomEmbarcacion << endl;
+                    cout << "Ya no hay cupos disponibles en este viaje "<< endl;
                     return 0;
                 }
 
@@ -341,7 +332,7 @@ int registrarPasajero()
                 cout << "Ingrese su cedula: ";
                 cin >> cab->Cedula;
 
-                cab->MatriculaElegida = aux->MatriculaOriginal;
+                cab->IdentificadorElegido = aux->Identificador;
 
                 cab->sig = NULL;
                 return 0;
@@ -359,16 +350,16 @@ int registrarPasajero()
                     cout << "Ya no hay cupos disponibles" << endl;
                     registrarPasajero();
                 }
-                cout << "ingrese su nombre: ";
+                cout << "Ingrese su nombre: ";
                 cin >> auxP1->Nombre;
 
-                cout << "ingrese su apellido: ";
+                cout << "Ingrese su apellido: ";
                 cin >> auxP1->Apellido;
 
-                cout << "ingrese su cedula: ";
+                cout << "Ingrese su cedula: ";
                 cin >> auxP1->Cedula;
 
-                auxP1->MatriculaElegida = aux->MatriculaOriginal;
+                auxP1->IdentificadorElegido = aux->Identificador;
 
                 auxP1->sig = NULL;
                 auxP2 = cab;
@@ -386,7 +377,7 @@ int registrarPasajero()
                 free(auxP2);
             }
         }
-        if (aux->MatriculaOriginal != buscadorBarco) // no coincide
+        if (aux->Identificador != buscadorBarco) // no coincide
         {
             if (aux->der != NULL)
             {
@@ -407,14 +398,14 @@ int MostrarPasajeros()
 {
     if (aux == NULL)
     {
-        cout << "No hay embarcaciones registradas" << endl;
+        cout << "No hay pasajeros registrados" << endl;
         return 0;
     }
     if (aux != NULL)
     {
         for (auxP1 = cab; auxP1 != NULL; auxP1 = auxP1->sig)
         {
-            if (auxP1->MatriculaElegida == buscadorBarco)
+            if (auxP1->IdentificadorElegido == buscadorBarco)
             {
                 cout << "Nombre: " << auxP1->Nombre << " " << auxP1->Apellido << endl;
                 cout << "Numero de Cedula: " << auxP1->Cedula << endl;
@@ -427,7 +418,7 @@ int MostrarPasajeros()
 
 int Ubicar(Barcos *aux3, int buscarB)
 {
-    if (aux3->MatriculaOriginal == buscarB)
+    if (aux3->Identificador == buscarB)
     {
         aux = aux3;
     }
@@ -475,12 +466,15 @@ int EliminarCaso1() // el nodo no tiene hijos
     if (aux2->izq == aux)
     {
         aux2->izq = NULL;
+        free(aux);
+        return 0;
     }
-    if (aux2->der == aux)
+    else if (aux2->der == aux)
     {
         aux2->der = NULL;
+        free(aux);
+        return 0;
     }
-    free(aux);
     return 0;
 }
 
@@ -530,38 +524,32 @@ int EliminarCaso3() // el nodo tiene dos hijos
 
 int EliminarEmbarcacion()
 {
-    cout << "ingrese la matricula de la embarcacion que desea eliminar: ";
+    cout << "Ingrese el identificador del viaje que desea eliminar: ";
     cin >> buscadorBarco;
 
     Ubicar(raiz, buscadorBarco);
 
     if (aux == NULL)
     {
-        cout << "No hay embarcaciones registradas" << endl;
+        cout << "No hay viajes registrados" << endl;
         return 0;
     }
 
     if (aux->izq == NULL && aux->der == NULL) // caso 1
     {
-
         EliminarCaso1();
         cout << "Eliminacion exitosa" << endl;
         return 0;
     }
     if ((aux->izq == NULL && aux->der != NULL) && (aux->izq != NULL && aux->der == NULL)) // caso 2
     {
-
         EliminarCaso2();
         cout << "Eliminacion exitosa" << endl;
-        raiz = insertar(raiz);
         return 0;
     }
     if (aux->izq != NULL && aux->der != NULL) // caso 3
     {
-
         EliminarCaso3();
-        cout << "Eliminacion exitosa" << endl;
-        raiz = insertar(raiz);
         return 0;
     }
     return 0;
@@ -574,12 +562,12 @@ int main()
     do
     {
         cout << "---------------Menu de opciones---------------" << endl;
-        cout << "1. Registrar un nuevo viaje" << endl;
-        cout << "2. Buscar un viaje por identificador" << endl;
-        cout << "3. Listar todos los viajes" << endl;
-        cout << "4. Eliminar un viaje por identificador (no terminado)" << endl;
-        cout << "5. Registrar un pasajero en un viaje" << endl;
-        cout << "6. Listar los pasajeros de un viaje" << endl;
+        cout << "1. Registrar viaje" << endl;
+        cout << "2. buscar viaje" << endl;
+        cout << "3. mostrar viaje" << endl;
+        cout << "4. eliminar viaje (no terminado)" << endl;
+        cout << "5. registrar pasajero" << endl;
+        cout << "6. mostrar pasajeros" << endl;
         cout << "7. Salir" << endl;
         cout << "---------------------------------------------" << endl;
         cout << "eliga una opcion: ";
@@ -592,7 +580,7 @@ int main()
             break;
         case 2:
             aux = raiz;
-            cout << "Ingrese la matricula de la embarcacion: ";
+            cout << "Ingrese el identificador de la embarcacion: ";
             cin >> buscadorBarco;
             buscarEmbarcacion();
             break;
@@ -607,15 +595,18 @@ int main()
             break;
         case 5:
             aux = raiz;
-            cout << "Ingrese el matricula de la embarcacion: ";
+            cout << "Ingrese el identificador del viaje: ";
             cin >> buscadorBarco;
             registrarPasajero();
             break;
         case 6:
-            cout << "Ingrese la matricula de la embarcacion: ";
+            cout << "Ingrese la identificador del viaje: ";
             cin >> buscadorBarco;
-            cout << "------------pasajeros registrados en la embarcacion------------" << endl;
+            cout << "------------pasajeros registrados en el viaje------------" << endl;
             MostrarPasajeros();
+            break;
+        case 7:
+            cout << "Programa finalizado. Que tenga un buen dia" << endl;
             break;
         }
     } while (opcion != 7);
