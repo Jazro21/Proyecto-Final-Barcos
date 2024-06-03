@@ -33,7 +33,7 @@ struct Barcos
     int Mes = 0;
     int Año = 0;
 
-    int total = 0;
+    int PasajerosAbordo = 0;
 
     Barcos *izq = NULL;
     Barcos *der = NULL;
@@ -81,8 +81,8 @@ int RegistrarEmbarcacion()
     aux = ((struct Barcos *)malloc(sizeof(struct Barcos)));
 
     cout << "Ingrese la matricula de la embarcacion: ";
-    cin >> temporalMatricula;
-    aux->MatriculaOriginal = temporalMatricula;
+    cin >> aux->MatriculaOriginal;
+    temporalMatricula = aux->MatriculaOriginal;
 
     if (temporalMatricula < 10)
     {
@@ -112,6 +112,7 @@ int RegistrarEmbarcacion()
 
     cout << "Ingrese la capacidad de la embarcacion (numero de personas): ";
     cin >> aux->Capacidad;
+    aux->PasajerosAbordo = 0;
     // ------------------------------------------------------------
     cout << "Ingrese el año del viaje: ";
     cin >> temporalAño;
@@ -255,7 +256,7 @@ int InOrden(struct Barcos *sub)
     cout << "Identificador: " << sub->Identificador << endl;
     cout << "------------------------------------------------" << endl;
 
-if (sub->der != NULL)
+    if (sub->der != NULL)
     {
         InOrden(sub->der);
     }
@@ -291,10 +292,15 @@ int buscarEmbarcacion()
                 aux = aux->der;
                 buscarEmbarcacion();
             }
-            else if (aux->izq != NULL)
+            if (aux->izq != NULL)
             {
                 aux = aux->izq;
                 buscarEmbarcacion();
+            }
+            if (aux->izq == NULL && aux->der == NULL)
+            {
+                cout << "No hay embarcaciones registradas con esa matricula" << endl;
+                return 0;
             }
         }
     }
@@ -303,18 +309,28 @@ int buscarEmbarcacion()
 
 int registrarPasajero()
 {
-    if (aux == NULL)
+    if (aux == NULL) // no hay embarcaciones registradas
     {
         cout << "No hay embarcaciones registradas" << endl;
         return 0;
     }
-    if (aux != NULL)
+    if (aux != NULL) // hay embarcaciones registradas
     {
-        if (aux->MatriculaOriginal == buscadorBarco)
+        if (aux->MatriculaOriginal == buscadorBarco) // el buscador coincide con la matricula
         {
             if (cab == NULL)
             {
                 cab = (struct pasajeros *)malloc(sizeof(struct pasajeros));
+
+                if (aux->PasajerosAbordo < aux->Capacidad)
+                {
+                    aux->PasajerosAbordo = aux->PasajerosAbordo + 1;
+                }
+                else if (aux->PasajerosAbordo == aux->Capacidad)
+                {
+                    cout << "Ya no hay cupos disponibles es la embarcacion"<<aux->NomEmbarcacion << endl;
+                    return 0;
+                }
 
                 cout << "Ingrese su nombre: ";
                 cin >> cab->Nombre;
@@ -327,22 +343,22 @@ int registrarPasajero()
 
                 cab->MatriculaElegida = aux->MatriculaOriginal;
 
-                if (aux->Capacidad < aux->total)
-                {
-                    aux->total = aux->total + 1;
-                }
-                else if (aux->Capacidad <= aux->total)
-                {
-                    cout << "Ya no hay cupos disponibles" << endl;
-                    registrarPasajero();
-                }
-
                 cab->sig = NULL;
                 return 0;
             }
             if (cab != NULL)
             {
                 auxP1 = (struct pasajeros *)malloc(sizeof(struct pasajeros));
+
+                if (aux->PasajerosAbordo < aux->Capacidad)
+                {
+                    aux->PasajerosAbordo = aux->PasajerosAbordo + 1;
+                }
+                else if (aux->PasajerosAbordo == aux->Capacidad)
+                {
+                    cout << "Ya no hay cupos disponibles" << endl;
+                    registrarPasajero();
+                }
                 cout << "ingrese su nombre: ";
                 cin >> auxP1->Nombre;
 
@@ -353,16 +369,6 @@ int registrarPasajero()
                 cin >> auxP1->Cedula;
 
                 auxP1->MatriculaElegida = aux->MatriculaOriginal;
-
-                if (aux->Capacidad < aux->total)
-                {
-                    aux->total = aux->total + 1;
-                }
-                else if (aux->Capacidad <= aux->total)
-                {
-                    cout << "Ya no hay cupos disponibles" << endl;
-                    registrarPasajero();
-                }
 
                 auxP1->sig = NULL;
                 auxP2 = cab;
@@ -380,7 +386,7 @@ int registrarPasajero()
                 free(auxP2);
             }
         }
-        if (aux->MatriculaOriginal != buscadorBarco)
+        if (aux->MatriculaOriginal != buscadorBarco) // no coincide
         {
             if (aux->der != NULL)
             {
@@ -421,21 +427,19 @@ int MostrarPasajeros()
 
 int Ubicar(Barcos *aux3, int buscarB)
 {
-    if (aux3->Matricula == buscarB)
+    if (aux3->MatriculaOriginal == buscarB)
     {
         aux = aux3;
     }
-    if (aux3->Matricula != buscarB)
+    else
     {
-        if (aux3->der != NULL)
-        {
-            aux3 = aux3->der;
-            Ubicar(aux3->der, buscarB);
-        }
         if (aux3->izq != NULL)
         {
-            aux3 = aux3->izq;
             Ubicar(aux3->izq, buscarB);
+        }
+        if (aux3->der != NULL)
+        {
+            Ubicar(aux3->der, buscarB);
         }
     }
     return 0;
@@ -443,19 +447,19 @@ int Ubicar(Barcos *aux3, int buscarB)
 
 int UbicarPadre(Barcos *padre)
 {
-    if (padre->izq != NULL && padre->izq != aux)
+    if ((padre->izq != NULL) && (padre->izq != aux))
     {
         UbicarPadre(padre->izq);
     }
-    if (padre->izq = aux)
+    if (padre->izq == aux)
     {
         aux2 = padre;
     }
-    if (padre->der != NULL && padre->der != aux)
+    if ((padre->der != NULL) && (padre->der != aux))
     {
         UbicarPadre(padre->der);
     }
-    if (padre->der = aux)
+    if (padre->der == aux)
     {
         aux2 = padre;
     }
@@ -485,6 +489,11 @@ int EliminarCaso2() // el nodo tiene un hijo
     if (aux != raiz)
     {
         UbicarPadre(raiz);
+    }
+    else
+    {
+        free(aux);
+        return 0;
     }
 
     if (aux2->izq == aux)
@@ -534,16 +543,26 @@ int EliminarEmbarcacion()
 
     if (aux->izq == NULL && aux->der == NULL) // caso 1
     {
+
         EliminarCaso1();
+        cout << "Eliminacion exitosa" << endl;
+        return 0;
     }
     if ((aux->izq == NULL && aux->der != NULL) && (aux->izq != NULL && aux->der == NULL)) // caso 2
     {
-        EliminarCaso2();
-    }
 
+        EliminarCaso2();
+        cout << "Eliminacion exitosa" << endl;
+        raiz = insertar(raiz);
+        return 0;
+    }
     if (aux->izq != NULL && aux->der != NULL) // caso 3
     {
+
         EliminarCaso3();
+        cout << "Eliminacion exitosa" << endl;
+        raiz = insertar(raiz);
+        return 0;
     }
     return 0;
 }
@@ -575,6 +594,7 @@ int main()
             aux = raiz;
             cout << "Ingrese la matricula de la embarcacion: ";
             cin >> buscadorBarco;
+            buscarEmbarcacion();
             break;
         case 3:
             cout << "------------embarcaciones registradas------------" << endl;
