@@ -255,7 +255,7 @@ int InOrden(struct Barcos *sub)
     cout << "Identificador: " << sub->Identificador << endl;
     cout << "------------------------------------------------" << endl;
 
-    if (sub->der != NULL)
+if (sub->der != NULL)
     {
         InOrden(sub->der);
     }
@@ -282,6 +282,7 @@ int buscarEmbarcacion()
             cout << "Numero de pasajeros: " << aux->Capacidad << endl;
             cout << "Identificador: " << aux->Identificador << endl;
             cout << "------------------------------------------------" << endl;
+            return 0;
         }
         if (aux->MatriculaOriginal != buscadorBarco)
         {
@@ -290,8 +291,7 @@ int buscarEmbarcacion()
                 aux = aux->der;
                 buscarEmbarcacion();
             }
-
-            if (aux->izq != NULL)
+            else if (aux->izq != NULL)
             {
                 aux = aux->izq;
                 buscarEmbarcacion();
