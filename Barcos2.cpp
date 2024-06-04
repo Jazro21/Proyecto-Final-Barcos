@@ -390,9 +390,9 @@ int registrarPasajero()
             }
             if (buscadorBarco > aux->Identificador)
             {
-                if (aux->izq != NULL)
+                if (aux->der != NULL)
                 {
-                    aux = aux->izq;
+                    aux = aux->der;
                     registrarPasajero();
                 }
             }
