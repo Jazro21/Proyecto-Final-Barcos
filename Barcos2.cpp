@@ -380,15 +380,21 @@ int registrarPasajero()
         }
         if (aux->Identificador != buscadorBarco) // no coincide
         {
-            if (aux->der != NULL)
+            if (buscadorBarco < aux->Identificador)
             {
-                aux = aux->der;
-                registrarPasajero();
+                if (aux->izq != NULL)
+                {
+                    aux = aux->izq;
+                    registrarPasajero();
+                }
             }
-            if (aux->izq != NULL)
+            if (buscadorBarco > aux->Identificador)
             {
-                aux = aux->izq;
-                registrarPasajero();
+                if (aux->izq != NULL)
+                {
+                    aux = aux->izq;
+                    registrarPasajero();
+                }
             }
         }
     }
