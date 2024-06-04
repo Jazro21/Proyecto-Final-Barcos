@@ -288,11 +288,6 @@ int buscarEmbarcacion()
                 aux = aux->izq;
                 buscarEmbarcacion();
             }
-            if (aux->izq == NULL && aux->der == NULL)
-            {
-                cout << "No hay existe un viaje con ese identificador" << endl;
-                return 0;
-            }
         }
     }
     return 0;
