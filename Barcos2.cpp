@@ -92,7 +92,7 @@ int RegistrarEmbarcacion()
         }
     }
 
-    cout << "Ingrese el nombre del viaje: ";
+    cout << "Ingrese el nombre de la embarcacion: ";
     cin >> aux->NomEmbarcacion;
 
     cout << "Ingrese el destino del viaje: ";
@@ -101,11 +101,11 @@ int RegistrarEmbarcacion()
     cout << "Ingrese el precio del viaje: $";
     cin >> aux->Precio;
 
-    cout << "Ingrese la capacidad del viaje (numero de personas abordo): ";
+    cout << "Ingrese la capacidad maxima de la embarcacion (numero de personas abordo): ";
     cin >> aux->Capacidad;
     aux->PasajerosAbordo = 0;
     // ------------------------------------------------------------
-    cout << "Ingrese el año del viaje: ";
+    cout << "Ingrese el ano del viaje: ";
     cin >> temporalAño;
     aux->Año = temporalAño;
 
@@ -278,15 +278,21 @@ int buscarEmbarcacion()
         }
         if (aux->Identificador != buscadorBarco)
         {
-            if (aux->der != NULL)
+            if (buscadorBarco < aux->Identificador)
             {
-                aux = aux->der;
-                buscarEmbarcacion();
+                if (aux->izq != NULL)
+                {
+                    aux = aux->izq;
+                    buscarEmbarcacion();
+                }
             }
-            if (aux->izq != NULL)
+            if (buscadorBarco > aux->Identificador)
             {
-                aux = aux->izq;
-                buscarEmbarcacion();
+                if (aux->der != NULL)
+                {
+                    aux = aux->der;
+                    buscarEmbarcacion();
+                }
             }
         }
     }
@@ -314,7 +320,7 @@ int registrarPasajero()
                 }
                 else if (aux->PasajerosAbordo == aux->Capacidad)
                 {
-                    cout << "Ya no hay cupos disponibles en este viaje "<< endl;
+                    cout << "Ya no hay cupos disponibles en este viaje " << endl;
                     return 0;
                 }
 
@@ -557,12 +563,12 @@ int main()
     do
     {
         cout << "---------------Menu de opciones---------------" << endl;
-        cout << "1. Registrar viaje" << endl;
-        cout << "2. buscar viaje" << endl;
-        cout << "3. mostrar viaje" << endl;
-        cout << "4. eliminar viaje (no terminado)" << endl;
-        cout << "5. registrar pasajero" << endl;
-        cout << "6. mostrar pasajeros" << endl;
+        cout << "1. Registrar un nuevo viaje" << endl;
+        cout << "2. Buscar un viaje por identificador" << endl;
+        cout << "3. Listar todos los viajes" << endl;
+        cout << "4. Eliminar un viaje por identificador" << endl;
+        cout << "5. Registrar un pasajero en un viaje" << endl;
+        cout << "6. Listar pasajeros de un viaje" << endl;
         cout << "7. Salir" << endl;
         cout << "---------------------------------------------" << endl;
         cout << "eliga una opcion: ";
@@ -574,9 +580,10 @@ int main()
             raiz = insertar(raiz);
             break;
         case 2:
-            aux = raiz;
             cout << "Ingrese el identificador de la embarcacion: ";
             cin >> buscadorBarco;
+
+            aux = raiz;
             buscarEmbarcacion();
             break;
         case 3:
