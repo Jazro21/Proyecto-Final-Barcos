@@ -44,7 +44,7 @@ struct pasajeros
     char Nombre[20];
     char Apellido[20];
 
-    int IdentificadorElegido = 0;
+    long long IdentificadorElegido = 0;
     // char EmbarcaionEligida[20]; // no se está implementando
 
     int Cedula = 0;
@@ -349,7 +349,7 @@ int registrarPasajero()
                 else if (aux->PasajerosAbordo == aux->Capacidad)
                 {
                     cout << "Ya no hay cupos disponibles" << endl;
-                    registrarPasajero();
+                    return 0;
                 }
                 cout << "Ingrese su nombre: ";
                 cin >> auxP1->Nombre;
@@ -380,21 +380,15 @@ int registrarPasajero()
         }
         if (aux->Identificador != buscadorBarco) // no coincide
         {
-            if (buscadorBarco < aux->Identificador)
+            if (aux->der != NULL)
             {
-                if (aux->izq != NULL)
-                {
-                    aux = aux->izq;
-                    registrarPasajero();
-                }
+                aux = aux->der;
+                registrarPasajero();
             }
-            if (buscadorBarco > aux->Identificador)
+            if (aux->izq != NULL)
             {
-                if (aux->der != NULL)
-                {
-                    aux = aux->der;
-                    registrarPasajero();
-                }
+                aux = aux->izq;
+                registrarPasajero();
             }
         }
     }
@@ -419,6 +413,7 @@ int MostrarPasajeros()
                 cout << "---------------------------------------------" << endl;
             }
         }
+        return 0;
     }
     return 0;
 }
